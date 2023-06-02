@@ -21,8 +21,7 @@
             }
         </style>
         <!-- script -->
-        <script src="{{ asset('assets/js/script.js') }}">
-        </script>
+       
     </head>
     <body class="antialiased">
         <div class="all_info">
@@ -53,10 +52,10 @@
                 <div class="basis">
                 <h2>TODO ({{count($listItems)}})</h2>
                 <div class="task ">
-                    <!-- <div class="flex itemfromlist itemToDo enabled_item" id="div1" ondrop="drop(event)" ondragover="allowDrop(event)">
+                    <div class="flex itemfromlist itemToDo enabled_item" id="enabled_item1"  ondrop="drop(event)" ondragover="allowDrop(event)">
                     <p>Drag a done item back to here</p>
-                    <p>+</p> -->
-                    <!-- </div> -->
+                    <p>+</p>
+                    </div>
                     @foreach ($listItems as $listItem)
                     <div class="flex itemfromlist itemToDo itemgap" draggable="true" ondragstart="drag(event)">
                         <strong>{{$listItem->name}}</strong>
@@ -75,10 +74,10 @@
                 <div class="basis"><h2>DOING ({{count($listItemsDoing)}})</h2>
                 
                 <div class="task ">
-                    <!-- <div class="flex itemfromlist itemToDo enabled_item" id="div1" ondrop="drop(event)" ondragover="allowDrop(event)">
+                    <div class="flex itemfromlist itemToDo enabled_item" id="enabled_item2" ondrop="drop(event)" ondragover="allowDrop(event)">
                     <p>Drag a doing item back to here</p>
                     <p>+</p>
-                    </div> -->
+                    </div>
                     
                     @foreach ($listItemsDoing as $listItem)
                     <div class="flex itemfromlist itemDoing itemgap" draggable="true" ondragstart="drag(event)">
@@ -97,10 +96,10 @@
                 
                 <div class="basis"><h2>COMPLETED ({{count($listItemsCompleted)}})</h2>
                 <div class="task">
-                    <!-- <div class="flex itemfromlist itemToDo enabled_item" id="div2" ondrop="drop(event)" ondragover="allowDrop(event)">
+                    <div class="flex itemfromlist itemToDo enabled_item " id="enabled_item3" ondrop="drop(event)" ondragover="allowDrop(event)">
                         <p>Drag a Todo item back to here</p>
                         <p>-</p>
-                    </div> -->
+                    </div>
                     
                     @foreach ($listItemsCompleted as $listItem)
                     <div class="flex itemfromlist itemComplete itemgap" draggable="true" ondragstart="drag(event)">
@@ -118,5 +117,7 @@
             </div>
             </div>
         </div> 
+        <script src="{{ asset('assets/js/script.js') }}">
+        </script>
     </body>
 </html>

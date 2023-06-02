@@ -1,0 +1,123 @@
+*{
+    --todoColor : rgb(103, 103, 199);
+    --completeColor : rgb(167, 167, 167);
+    --doingColor: rgb(33, 168, 33);
+    --basis: 30%;
+}
+
+.all_info{
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    flex-direction: column;
+    padding: 30px;
+}
+
+.box_tasks {
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    align-items: flex-start;
+    justify-content: space-between;
+ 
+}
+
+.addToListForm {
+    background: #e5e287;
+    display: flex;
+    gap: 10px;
+    color: black;
+    align-items: flex-start;
+    font-weight: bold;
+    padding: 10px;
+    flex-direction: column;
+    box-shadow: 3px 4px 5px #585858;
+}
+
+.addToListForm input, textarea {
+    border-bottom: solid 1px black;
+}
+
+.basis {
+    flex-basis: var(--basis);
+}
+
+.todolist {
+    justify-content: space-between !important;
+    display: flex !important;
+    gap: 10px;
+}
+
+.flex {
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 300px;
+    
+}
+
+.task {
+    display: flex;
+    flex-direction: column;
+}
+
+.itemfromlist {
+    gap: 0;
+    flex-direction: column;
+    padding: 30px;
+    box-shadow: 3px 4px 5px #585858;
+}
+
+.itemgap:not(:first-child) {
+    margin-top: 10px;
+}
+
+.itemToDo {
+    background-color: var(--todoColor);
+}
+
+.itemDoing {
+    background-color: var(--doingColor);
+}
+.itemComplete {
+    background-color: var(--completeColor);
+}
+
+.enabled_item {
+    background-color: transparent;
+    border: 1px dashed black;
+}
+
+.btn_color {
+    background: #00000096;
+    padding: 15px;
+    border-radius: 50px;
+    color: white;
+    font-weight: bold;
+}
+
+.btn_color_d:hover {
+    background: var(--doingColor);
+    padding: 15px;
+    border-radius: 50px;
+    color: white;
+    font-weight: bold;
+}
+.btn_color_c:hover {
+    background: var(--completeColor);
+    padding: 15px;
+    border-radius: 50px;
+    color: white;
+    font-weight: bold;
+}
+.btn_color_t:hover {
+    background: var(--todoColor);
+    padding: 15px;
+    border-radius: 50px;
+    color: white;
+    font-weight: bold;
+}

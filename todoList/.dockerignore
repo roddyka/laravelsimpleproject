@@ -1,0 +1,17 @@
+# Ignore development and version control files
+.dockerignore
+.git
+.gitignore
+
+# Ignore Composer files
+vendor/
+composer.lock
+
+# Ignore node_modules if not needed
+node_modules/
+
+# Ignore other Laravel specific files
+.env
+.env.example
+/storage/*
+!/storage/.gitkeep

@@ -1,62 +1,59 @@
-FROM php:8.0-fpm
+# Estágio 1: Construção da imagem
+FROM php:8.0-apache as builder
 
-# Set working directory
-WORKDIR /var/www
-
-# Add docker php ext repo
-ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
-
-# Install php extensions
-RUN chmod +x /usr/local/bin/install-php-extensions && sync && \
-    install-php-extensions mbstring pdo_mysql zip exif pcntl gd memcached
-
-# Install dependencies
+# Instala as dependências necessárias
 RUN apt-get update && apt-get install -y \
-    build-essential \
     libpng-dev \
-    libjpeg62-turbo-dev \
-    libfreetype6-dev \
-    locales \
+    libonig-dev \
+    libxml2-dev \
     zip \
-    jpegoptim optipng pngquant gifsicle \
     unzip \
-    git \
-    curl \
-    lua-zlib-dev \
-    libmemcached-dev \
-    nginx
+    libzip-dev \
+    libpq-dev \
+    curl
 
-# Install supervisor
-RUN apt-get install -y supervisor
+# Instala as extensões do PHP necessárias
+RUN docker-php-ext-install pdo_mysql zip exif pcntl gd
 
-# Install composer
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+# Ativa o mod_rewrite do Apache
+RUN a2enmod rewrite
 
-# Clear cache
-RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+# Define o diretório de trabalho
+WORKDIR /var/www/html
 
-# Add user for laravel application
-RUN groupadd -g 1000 www
-RUN useradd -u 1000 -ms /bin/bash -g www www
+# Copia os arquivos do projeto para o contêiner
+COPY . /var/www/html
 
-# Copy code to /var/www
-COPY --chown=www:www-data . /var/www
+# Define as permissões corretas para o diretório de armazenamento
+RUN chown -R www-data:www-data /var/www/html/storage
 
-# add root to www group
-RUN chmod -R ug+w /var/www/storage
+# Copia o arquivo de configuração do Apache para o contêiner
+COPY apache.conf /etc/apache2/sites-available/000-default.conf
 
-# Copy nginx/php/supervisor configs
-RUN cp docker/supervisor.conf /etc/supervisord.conf
-RUN cp docker/php.ini /usr/local/etc/php/conf.d/app.ini
-RUN cp docker/nginx.conf /etc/nginx/sites-enabled/default
+# Estágio 2: Imagem final
+FROM php:8.0-apache
 
-# PHP Error Log Files
-RUN mkdir /var/log/php
-RUN touch /var/log/php/errors.log && chmod 777 /var/log/php/errors.log
+# Copia os arquivos do estágio anterior para a imagem final
+COPY --from=builder /var/www/html /var/www/html
+COPY --from=builder /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/000-default.conf
 
-# Deployment steps
-RUN composer install --optimize-autoloader --no-dev
-RUN chmod +x /var/www/docker/run.sh
+# Instala as dependências do MySQL
+RUN apt-get update && apt-get install -y \
+    default-mysql-client \
+    libpq-dev
 
-EXPOSE 80
-ENTRYPOINT ["/var/www/docker/run.sh"]
+# Define as variáveis de ambiente para conexão com o banco de dados MySQL
+ENV DB_HOST=db
+ENV DB_PORT=3306
+ENV DB_DATABASE=my_database
+ENV DB_USERNAME=root
+ENV DB_PASSWORD=
+
+# Define as permissões corretas para o diretório de armazenamento
+RUN chown -R www-data:www-data /var/www/html/storage
+
+# Define o diretório de trabalho
+WORKDIR /var/www/html
+
+# Inicia o servidor Apache
+CMD ["apache2-foreground"]
